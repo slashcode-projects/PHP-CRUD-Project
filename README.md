@@ -59,3 +59,19 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `gend
 (6, 'sadsa', 'dsfsajh', 'abc@gmail.com', 'cf9aea1dff4bbee155bf468b69e11544', 'Female', '8289784512', '2020-02-23 16:49:19', '2020-02-23 16:49:19', 1);
 
 -- --------
+
+
+
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+COMMIT;
