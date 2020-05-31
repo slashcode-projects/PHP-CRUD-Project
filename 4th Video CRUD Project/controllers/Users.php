@@ -91,4 +91,55 @@ class Users extends CI_Controller {
         $this->session->sess_destroy(); 
         redirect('users/login/'); 
     }   
+      //User Registration Code   
+
+    public function registration(){ 
+        $data = $userData = array(); 
+         
+        // If registration request is submitted 
+        if($this->input->post('signupSubmit')){ 
+            $this->form_validation->set_rules('first_name', 'First Name', 'required'); 
+            $this->form_validation->set_rules('last_name', 'Last Name', 'required'); 
+            $this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_email_check'); 
+            $this->form_validation->set_rules('password', 'password', 'required'); 
+            $this->form_validation->set_rules('conf_password', 'confirm password', 'required|matches[password]'); 
+ 
+            $userData = array( 
+                'first_name' => strip_tags($this->input->post('first_name')), 
+                'last_name' => strip_tags($this->input->post('last_name')), 
+                'email' => strip_tags($this->input->post('email')), 
+                'password' => md5($this->input->post('password')), 
+                'gender' => $this->input->post('gender'), 
+                'phone' => strip_tags($this->input->post('phone')) 
+            ); 
+ 
+            if($this->form_validation->run() == true){ 
+                $insert = $this->user->insert($userData); 
+                if($insert){ 
+                    $this->session->set_userdata('success_msg', 'Your account registration has been successful. Please login to your account.'); 
+                    redirect('users/login'); 
+                }else{ 
+                    $data['error_msg'] = 'Some problems occured, please try again.'; 
+                } 
+            }else{ 
+                $data['error_msg'] = 'Please fill all the mandatory fields.'; 
+            } 
+        } 
+         
+        $data['user'] = $userData; 
+         
+        $this->load->view('users/registration', $data); 
+        
+    }
+
+    //To check if email is already exist in database
+    public function email_check($str){ 
+        $checkEmail = $this->user->getRows($str); 
+        if($checkEmail > 0){ 
+            $this->form_validation->set_message('email_check', 'The given email already exists.'); 
+            return FALSE; 
+        }else{ 
+            return TRUE; 
+        } 
+    }
 }
